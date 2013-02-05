@@ -33,20 +33,20 @@
 
 class Mobile_Detect {
 
-    protected $scriptVersion = '2.5.4';
+    var $scriptVersion = '2.5.4';
 
     // External info.
-    protected $userAgent = null;
-    protected $httpHeaders;
+    var $userAgent = null;
+    var $httpHeaders;
 
     // Arrays holding all detection rules.
-    protected $mobileDetectionRules = null;
-    protected $mobileDetectionRulesExtended = null;
+    var $mobileDetectionRules = null;
+    var $mobileDetectionRulesExtended = null;
     // Type of detection to use.
-    protected $detectionType = 'mobile'; // mobile, extended @todo: refactor this.
+    var $detectionType = 'mobile'; // mobile, extended @todo: refactor this.
 
     // List of mobile devices (phones)
-    protected $phoneDevices = array(
+    var $phoneDevices = array(
         'iPhone'        => '(iPhone.*Mobile|iPod|iTunes)',
         'BlackBerry'    => 'BlackBerry|rim[0-9]+',
         'HTC'           => 'HTC|HTC.*(Sensation|Evo|Vision|Explorer|6800|8100|8900|A7272|S510e|C110e|Legend|Desire|T8282)|APX515CKT|Qtek9090|APA9292KT|HD_mini|Sensation.*Z710e|PG86100|Z715e|Desire.*(A8181|HD)|ADR6200|ADR6425|001HT|Inspire 4G',
@@ -67,7 +67,7 @@ class Mobile_Detect {
         'GenericPhone'  => 'PDA;|PPC;|SAGEM|mmp|pocket|psp|symbian|Smartphone|smartfon|treo|up.browser|up.link|vodafone|wap|nokia|Series40|Series60|S60|SonyEricsson|N900|MAUI.*WAP.*Browser|LG-P500'
     );
     // List of tablet devices.
-    protected $tabletDevices = array(
+    var $tabletDevices = array(
         'BlackBerryTablet'  => 'PlayBook|RIM Tablet',
         'iPad'              => 'iPad|iPad.*Mobile', // @todo: check for mobile friendly emails topic.
         'NexusTablet'       => '^.*Android.*Nexus(((?:(?!Mobile))|(?:(\s(7|10).+))).)*$',
@@ -115,7 +115,7 @@ class Mobile_Detect {
         'GenericTablet'     => 'Android.*\b97D\b|Tablet(?!.*PC)|ViewPad7|LG-V909|MID7015|BNTV250A|LogicPD Zoom2|\bA7EB\b|CatNova8|A1_07|CT704|CT1002|\bM721\b|hp-tablet',
     );
     // List of mobile Operating Systems.
-    protected $operatingSystems = array(
+    var $operatingSystems = array(
         'AndroidOS'         => 'Android',
         'BlackBerryOS'      => 'blackberry|rim tablet os',
         'PalmOS'            => 'PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino',
@@ -140,7 +140,7 @@ class Mobile_Detect {
         'BREWOS'            => 'BREW',
     );
     // List of mobile User Agents.
-    protected $userAgents = array(
+    var $userAgents = array(
         // @reference: https://developers.google.com/chrome/mobile/docs/user-agent
         'Chrome'          => '\bCrMo\b|CriOS|Android.*Chrome/[.0-9]* (Mobile)?',
         'Dolfin'          => '\bDolfin\b',
@@ -166,15 +166,15 @@ class Mobile_Detect {
         'GenericBrowser'  => 'NokiaBrowser|OviBrowser|SEMC.*Browser|FlyFlow|Minimo|NetFront|Novarra-Vision'
     );
     // Utilities.
-    protected $utilities = array(
+    var $utilities = array(
         'WebKit'        => '(webkit)[ /]([\w.]+)',
         'Bot'           => 'Googlebot|DoCoMo|YandexBot|bingbot|ia_archiver|AhrefsBot|Ezooms|GSLFbot|WBSearchBot|Twitterbot|TweetmemeBot|Twikle|PaperLiBot|Wotbox|UnwindFetchor|facebookexternalhit',
         'MobileBot'     => 'Googlebot-Mobile|DoCoMo|YahooSeeker/M1A1-R2D2',
     );
     // Properties list.
     // @reference: http://user-agent-string.info/list-of-ua#Mobile Browser
-    const VER = '([\w._]+)';
-    protected $properties = array(
+    // Line 621 hard coded for PHP4 quick fix
+    var $properties = array(
 
         // Build
         'Mobile'        => 'Mobile/[VER]',
@@ -235,14 +235,12 @@ class Mobile_Detect {
 
     );
 
-    function __construct(){
-
+    function Mobile_Detect(){    	
         $this->setHttpHeaders();
-        $this->setUserAgent();
+        $this->setUserAgent();       
 
         $this->setMobileDetectionRules();
-        $this->setMobileDetectionRulesExtended();
-
+        $this->setMobileDetectionRulesExtended();        
     }
 
 
@@ -252,13 +250,13 @@ class Mobile_Detect {
     * so people can check on what version they are testing
     * for mobile devices.
     */
-    public function getScriptVersion(){
+    function getScriptVersion(){
 
         return $this->scriptVersion;
 
     }
 
-    public function setHttpHeaders($httpHeaders = null){
+    function setHttpHeaders($httpHeaders = null){
 
         if(!empty($httpHeaders)){
             $this->httpHeaders = $httpHeaders;
@@ -272,13 +270,13 @@ class Mobile_Detect {
 
     }
 
-    public function getHttpHeaders(){
+    function getHttpHeaders(){
 
         return $this->httpHeaders;
 
     }
 
-    public function setUserAgent($userAgent = null){
+    function setUserAgent($userAgent = null){
 
         if(!empty($userAgent)){
             $this->userAgent = $userAgent;
@@ -296,7 +294,7 @@ class Mobile_Detect {
 
     }
 
-    public function getUserAgent(){
+    function getUserAgent(){
 
         return $this->userAgent;
 
@@ -308,13 +306,13 @@ class Mobile_Detect {
 
     }
 
-    public function getPhoneDevices(){
+    function getPhoneDevices(){
 
         return $this->phoneDevices;
 
     }
 
-    public function getTabletDevices(){
+    function getTabletDevices(){
 
         return $this->tabletDevices;
 
@@ -325,8 +323,9 @@ class Mobile_Detect {
      *
      * This method is used for the magic methods $detect->is*()
      */
-    public function setMobileDetectionRules(){
+    function setMobileDetectionRules(){
         // Merge all rules together.
+    	
         $this->mobileDetectionRules = array_merge(
             $this->phoneDevices,
             $this->tabletDevices,
@@ -345,7 +344,7 @@ class Mobile_Detect {
      *
      * @return bool
      */
-    public function setMobileDetectionRulesExtended(){
+    function setMobileDetectionRulesExtended(){
 
         // Merge all rules together.
         $this->mobileDetectionRulesExtended = array_merge(
@@ -361,15 +360,13 @@ class Mobile_Detect {
     /**
      * @return array
      */
-    public function getRules()
-    {
-
+    function getRules()
+    {    	
         if($this->detectionType=='extended'){
             return $this->mobileDetectionRulesExtended;
         } else {
             return $this->mobileDetectionRules;
         }
-
     }
 
 /**
@@ -378,7 +375,7 @@ class Mobile_Detect {
 * inside isMobile() method.
 * @return boolean
 */
-    public function checkHttpHeadersForMobile(){
+    function checkHttpHeadersForMobile(){
 
         if(
             isset($this->httpHeaders['HTTP_ACCEPT']) &&
@@ -421,7 +418,7 @@ class Mobile_Detect {
      * @param array $arguments
      * @return mixed
      */
-    public function __call($name, $arguments)
+    function __call($name, $arguments)
     {
 
         $this->setDetectionType('mobile');
@@ -437,9 +434,10 @@ class Mobile_Detect {
     * @param null $userAgent deprecated
     * @return boolean
     */
-    private function matchDetectionRulesAgainstUA($userAgent = null){
-
-        // Begin general search.
+     function matchDetectionRulesAgainstUA($userAgent = null){
+     	
+     	// Begin general search.     	
+     	
         foreach($this->getRules() as $_regex){
             if(empty($_regex)){ continue; }
             if( $this->match($_regex, $userAgent) ){
@@ -461,7 +459,7 @@ class Mobile_Detect {
     * @param null $userAgent deprecated
     * @return mixed
     */
-    private function matchUAAgainstKey($key, $userAgent = null){
+     function matchUAAgainstKey($key, $userAgent = null){
 
         // Make the keys lowercase so we can match: isIphone(), isiPhone(), isiphone(), etc.
         $key = strtolower($key);
@@ -483,11 +481,11 @@ class Mobile_Detect {
     * @param null $httpHeaders deprecated
     * @return bool
     */
-    public function isMobile($userAgent = null, $httpHeaders = null) {
+    function isMobile($userAgent = null, $httpHeaders = null) {
 
         if($httpHeaders){ $this->setHttpHeaders($httpHeaders); }
-        if($userAgent){ $this->setUserAgent($userAgent); }
-
+        if($userAgent){ $this->setUserAgent($userAgent); }       
+        
         $this->setDetectionType('mobile');
 
         if ($this->checkHttpHeadersForMobile()) {
@@ -506,7 +504,7 @@ class Mobile_Detect {
      * @param null $httpHeaders deprecated
      * @return bool
     */
-    public function isTablet($userAgent = null, $httpHeaders = null) {
+    function isTablet($userAgent = null, $httpHeaders = null) {
 
         $this->setDetectionType('mobile');
 
@@ -530,7 +528,7 @@ class Mobile_Detect {
      * @param string $httpHeaders deprecated
      * @return bool|int|null
      */
-    public function is($key, $userAgent = null, $httpHeaders = null){
+    function is($key, $userAgent = null, $httpHeaders = null){
 
 
         // Set the UA and HTTP headers only if needed (eg. batch mode).
@@ -543,7 +541,7 @@ class Mobile_Detect {
 
     }
 
-    public function getOperatingSystems(){
+    function getOperatingSystems(){
 
         return $this->operatingSystems;
 
@@ -620,7 +618,7 @@ class Mobile_Detect {
 
             foreach($properties[$propertyName] as $propertyMatchString){
 
-                $propertyPattern = str_replace('[VER]', self::VER, $propertyMatchString);
+                $propertyPattern = str_replace('[VER]', '([\w._]+)', $propertyMatchString);
 
                 // Escape the special character which is the delimiter.
                 $propertyPattern = str_replace('/', '\/', $propertyPattern);
@@ -662,7 +660,7 @@ class Mobile_Detect {
             // Windows Phone 7-7.5 - Tested on the HTC Surround (7.0) HTC Trophy (7.5), LG-E900 (7.5), Nokia Lumia 800
             $this->version('Windows Phone OS')>=7.0 ||
 
-            // Blackberry 7 - Tested on BlackBerry® Torch 9810
+            // Blackberry 7 - Tested on BlackBerryÂ® Torch 9810
             // Blackberry 6.0 - Tested on the Torch 9800 and Style 9670
             $this->version('BlackBerry')>=6.0 ||
             // Blackberry Playbook (1.0-2.0) - Tested on PlayBook
